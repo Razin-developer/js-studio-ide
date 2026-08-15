@@ -42,10 +42,9 @@ export function executeCode(code, onLog, onFinish) {
     self.onmessage = async function(e) {
       const userCode = e.data.code;
       try {
-        // Execute code inside Async Function scope to support top-level await
-        const asyncFn = new Function(\`return (async () => {
-          \${userCode}
-        })();\`);
+        // Execute code using AsyncFunction constructor to support top-level await cleanly
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+        const asyncFn = new AsyncFunction(userCode);
 
         const result = await asyncFn();
         if (result !== undefined) {
@@ -68,12 +67,19 @@ export function executeCode(code, onLog, onFinish) {
 
   let finished = false;
 
+  const cleanup = () => {
+    if (!finished) {
+      finished = true;
+      clearTimeout(timeoutId);
+      worker.terminate();
+      URL.revokeObjectURL(workerUrl);
+    }
+  };
+
   // Timeout protection (5s)
   const timeoutId = setTimeout(() => {
     if (!finished) {
-      finished = true;
-      worker.terminate();
-      URL.revokeObjectURL(workerUrl);
+      cleanup();
       onLog({
         id: Date.now(),
         type: 'error',
@@ -97,18 +103,20 @@ export function executeCode(code, onLog, onFinish) {
     } else if (type === 'clear') {
       onLog({ type: 'clear' });
     } else if (type === 'error') {
-      onLog({
-        id: Date.now() + Math.random(),
-        type: 'error',
-        timestamp: new Date().toLocaleTimeString(),
-        content: message
-      });
+      if (!finished) {
+        cleanup();
+        onLog({
+          id: Date.now() + Math.random(),
+          type: 'error',
+          timestamp: new Date().toLocaleTimeString(),
+          content: message
+        });
+        const duration = (performance.now() - startTime).toFixed(2);
+        onFinish({ success: false, duration });
+      }
     } else if (type === 'success') {
       if (!finished) {
-        finished = true;
-        clearTimeout(timeoutId);
-        worker.terminate();
-        URL.revokeObjectURL(workerUrl);
+        cleanup();
         const duration = (performance.now() - startTime).toFixed(2);
         onFinish({ success: true, duration });
       }
@@ -117,10 +125,7 @@ export function executeCode(code, onLog, onFinish) {
 
   worker.onerror = function(err) {
     if (!finished) {
-      finished = true;
-      clearTimeout(timeoutId);
-      worker.terminate();
-      URL.revokeObjectURL(workerUrl);
+      cleanup();
       onLog({
         id: Date.now(),
         type: 'error',
@@ -135,11 +140,6 @@ export function executeCode(code, onLog, onFinish) {
   worker.postMessage({ code });
 
   return () => {
-    if (!finished) {
-      finished = true;
-      clearTimeout(timeoutId);
-      worker.terminate();
-      URL.revokeObjectURL(workerUrl);
-    }
+    cleanup();
   };
 }
