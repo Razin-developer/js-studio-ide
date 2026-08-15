@@ -4,27 +4,10 @@ import Editor from '@monaco-editor/react';
 const SLASH_TEMPLATES = [
   {
     label: '/arrayinit',
-    detail: 'Array Initialization Methods',
-    documentation: 'Demonstrates common techniques to initialize arrays in JavaScript (Array.from, fill, range, 2D matrix).',
-    insertText: `// JavaScript Array Initialization Patterns
-const \${1:size} = 5;
-
-// Method 1: Literal Initialization
-const \${2:arrLiteral} = [10, 20, 30, 40, 50];
-
-// Method 2: Array.from() with sequence generator
-const \${3:arrSequence} = Array.from({ length: \${1:size} }, (_, \${4:i}) => (\${4:i} + 1) * 10);
-
-// Method 3: Fill with default values
-const \${5:arrFilled} = new Array(\${1:size}).fill(\${6:0});
-
-// Method 4: 2D Matrix Initialization (3x3 grid)
-const \${7:matrix} = Array.from({ length: 3 }, () => new Array(3).fill(0));
-
-console.log("Literal Array:", \${2:arrLiteral});
-console.log("Sequence Array:", \${3:arrSequence});
-console.log("Filled Array:", \${5:arrFilled});
-console.log("2D Matrix:", \${7:matrix});`
+    detail: 'Initialize an Array (const myArray = [...])',
+    documentation: 'Initializes an array variable with default values or empty array.',
+    insertText: `// Array Initialization
+const \${1:myArray} = [\${2:10, 20, 30, 40, 50}];`
   },
   {
     label: '/maploop',
