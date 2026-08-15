@@ -5,14 +5,29 @@ import ConsoleOutput from './components/ConsoleOutput';
 import DOMPreview from './components/DOMPreview';
 import { executeCode } from './utils/runnerWorker';
 
-const DEFAULT_CODE = '';
+const STORAGE_KEY_CODE = 'js_studio_code';
+const STORAGE_KEY_THEME = 'js_studio_theme';
 
 export default function App() {
-  const [code, setCode] = useState(DEFAULT_CODE);
+  const [code, setCode] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_CODE);
+      return saved !== null ? saved : '';
+    } catch (e) {
+      return '';
+    }
+  });
   const [logs, setLogs] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [executionMetrics, setExecutionMetrics] = useState(null);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
+      return savedTheme || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
   const [activeTab, setActiveTab] = useState('console');
   const [isCopied, setIsCopied] = useState(false);
 
@@ -21,7 +36,17 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(STORAGE_KEY_THEME, theme);
+    } catch (e) {}
   }, [theme]);
+
+  // Persist code to localStorage on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY_CODE, code);
+    } catch (e) {}
+  }, [code]);
 
   const handleRunCode = (codeToRun = code) => {
     if (isRunning) return;
@@ -83,6 +108,9 @@ export default function App() {
 
   const handleClearCode = () => {
     setCode('');
+    try {
+      localStorage.removeItem(STORAGE_KEY_CODE);
+    } catch (e) {}
   };
 
   const handleClearConsole = () => {
