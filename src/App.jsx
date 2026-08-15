@@ -55,6 +55,17 @@ colors.forEach((color, index) => {
 
 // console.log output after loop completes
 console.log("Finished logging total colors count after loop:", processedCount);
+
+// 4. Array Initialization Techniques
+const size = 5;
+const rangeArray = Array.from({ length: size }, (_, i) => (i + 1) * 10);
+const filledArray = new Array(size).fill(0);
+const matrix2D = Array.from({ length: 3 }, () => new Array(3).fill(0));
+
+console.log("\n--- 4. Array Initialization ---");
+console.log("Range/Sequence Array:", rangeArray);
+console.log("Filled Array:", filledArray);
+console.log("2D Matrix:", matrix2D);
 `;
 
 export default function App() {
