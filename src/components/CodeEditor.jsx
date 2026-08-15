@@ -3,6 +3,110 @@ import Editor from '@monaco-editor/react';
 
 const SLASH_TEMPLATES = [
   {
+    label: '/maploop',
+    detail: 'Loop Array using map() with Variable Init',
+    documentation: 'Iterates and transforms an array using Array.prototype.map() with local variable initialization.',
+    insertText: `// Loop through an array using map() with variable initialization
+const \${1:numbers} = [10, 20, 30, 40, 50];
+
+// Initialization of multiplier variable
+const \${2:multiplier} = 2;
+
+const \${3:mappedResult} = \${1:numbers}.map((\${4:item}, \${5:index}) => {
+  // Variable initialization per iteration
+  const \${6:calculatedValue} = \${4:item} * \${2:multiplier};
+  const \${7:label} = \`Item #\${\${5:index} + 1}\`;
+  return \`\${\${7:label}}: \${\${6:calculatedValue}}\`;
+});
+
+console.log("Original Array:", \${1:numbers});
+console.log("Mapped Array:", \${3:mappedResult});`
+  },
+  {
+    label: '/forloop',
+    detail: 'Loop Array using for Loop with Variable Init',
+    documentation: 'Iterates through an array using a standard for loop with index variable initialization.',
+    insertText: `// Loop through an array using for loop with variable initialization
+const \${1:fruits} = ["Apple", "Banana", "Cherry", "Mango"];
+
+// Variable initialization for tracking / aggregation
+let \${2:totalLength} = 0;
+
+for (let \${3:i} = 0; \${3:i} < \${1:fruits}.length; \${3:i}++) {
+  // Variable initialization inside loop body
+  let \${4:fruit} = \${1:fruits}[\${3:i}];
+  let \${5:charCount} = \${4:fruit}.length;
+  \${2:totalLength} += \${5:charCount};
+  
+  console.log(\`Index \${\${3:i}}: \${\${4:fruit}} (\${\${5:charCount}} letters)\`);
+}
+
+console.log("Total character count:", \${2:totalLength});`
+  },
+  {
+    label: '/foreach',
+    detail: 'Loop Array using forEach() with console.log',
+    documentation: 'Iterates through an array using forEach() with variable initialization and console.log output after.',
+    insertText: `// Loop through array using forEach() and console.log
+const \${1:colors} = ["Red", "Green", "Blue", "Yellow"];
+let \${2:count} = 0; // Outer variable initialization
+
+\${1:colors}.forEach((\${3:color}, \${4:index}) => {
+  // Inner variable initialization
+  const \${5:formatted} = \`[\${\${4:index} + 1}] Color: \${\${3:color}.toUpperCase()}\`;
+  \${2:count}++;
+  console.log(\${5:formatted});
+});
+
+// console.log output after loop completes
+console.log("Finished processing \${2:count} colors!");`
+  },
+  {
+    label: '/forof',
+    detail: 'Loop Array using for...of with console.log',
+    documentation: 'Iterates through array items using for...of with variable init and console.log output.',
+    insertText: `// Loop through array using for...of loop with console.log
+const \${1:scores} = [85, 92, 78, 95, 88];
+let \${2:highestScore} = 0; // Variable init before loop
+
+for (const \${3:score} of \${1:scores}) {
+  // Variable init inside loop
+  const \${4:isPassed} = \${3:score} >= 80;
+  if (\${3:score} > \${2:highestScore}) {
+    \${2:highestScore} = \${3:score};
+  }
+  console.log(\`Score: \${\${3:score}} | Status: \${\${4:isPassed} ? "PASSED" : "FAILED"}\`);
+}
+
+// console.log output after loop completes
+console.log("Highest Score Achieved:", \${2:highestScore});`
+  },
+  {
+    label: '/clog',
+    detail: 'console.log() Statement',
+    documentation: 'Inserts a console.log statement to log values.',
+    insertText: `console.log("\${1:Output:}", \${2:value});`
+  },
+  {
+    label: '/push',
+    detail: 'Array push() Loop Operation',
+    documentation: 'Pushes dynamic elements into an array during loop iteration and logs results.',
+    insertText: `// Loop and push elements into a new array
+const \${1:sourceArray} = [1, 2, 3, 4, 5];
+const \${2:pushedArray} = [];
+
+for (let \${3:i} = 0; \${3:i} < \${1:sourceArray}.length; \${3:i}++) {
+  // Variable initialization per element
+  let \${4:newItem} = \${1:sourceArray}[\${3:i}] * 10;
+  
+  // Push item to target array
+  \${2:pushedArray}.push(\${4:newItem});
+  console.log(\`Pushed element: \${\${4:newItem}}\`);
+}
+
+console.log("Final Pushed Array:", \${2:pushedArray});`
+  },
+  {
     label: '/nestedloop',
     detail: '2D / Double Loop with Dynamic Sync',
     documentation: 'Generates nested loops with synchronized variable tabstops (i, j).',
