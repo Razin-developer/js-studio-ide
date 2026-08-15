@@ -175,18 +175,20 @@ export default function CodeEditor({ code, onChange, onRunCode, theme, editorRef
     editorRef.current = editor;
 
     // Enable real-time JavaScript syntax & error validation (on-the-fly linter)
-    monaco.languages.javascript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-      diagnosticCodesToIgnore: []
-    });
+    if (monaco?.languages?.typescript?.javascriptDefaults) {
+      monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: false,
+        noSyntaxValidation: false,
+        diagnosticCodesToIgnore: []
+      });
 
-    monaco.languages.javascript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.javascript.ScriptTarget.ESNext,
-      allowNonTsExtensions: true,
-      checkJs: true,
-      allowJs: true
-    });
+      monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget?.ESNext || 99,
+        allowNonTsExtensions: true,
+        checkJs: true,
+        allowJs: true
+      });
+    }
 
     // Real-time error marker listener
     const updateMarkers = () => {
