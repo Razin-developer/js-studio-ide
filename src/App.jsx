@@ -7,59 +7,14 @@ import { executeCode } from './utils/runnerWorker';
 
 const DEFAULT_CODE = `// JS Studio - Online JavaScript IDE
 // Press F5 or Ctrl+Enter to execute JavaScript
-// Type '/' in the editor for quick snippets (/maploop, /forloop, /sort, etc.)
+// Type '/' in the editor for quick snippets (/logarray, /maploop, /forloop, etc.)
 
-console.log("🚀 Welcome to JS Studio Terminal!");
+console.log("🚀 Welcome to JS Studio!");
 
-// 1. Array Loop using .map() with variable initialization
 const numbers = [10, 20, 30, 40, 50];
-const multiplier = 2; // Outer variable initialization
 
-const mappedResult = numbers.map((item, index) => {
-  // Inner variable initialization per iteration
-  const calculatedValue = item * multiplier;
-  const label = \`Item #\${index + 1}\`;
-  return \`\${label}: \${calculatedValue}\`;
-});
-
-console.log("\\n--- 1. Array Loop using map() ---");
-console.log("Original Array:", numbers);
-console.log("Mapped Array:", mappedResult);
-
-// 2. Array Loop using standard for loop with variable initialization
-const fruits = ["Apple", "Banana", "Cherry", "Mango"];
-let totalCharCount = 0; // Aggregator variable initialization
-
-console.log("\\n--- 2. Array Loop using for loop ---");
-for (let i = 0; i < fruits.length; i++) { // Loop counter variable init (let i = 0)
-  // Variable initialization per iteration
-  const fruit = fruits[i];
-  const charCount = fruit.length;
-  totalCharCount += charCount;
-  console.log(\`Index \${i}: \${fruit} (\${charCount} letters)\`);
-}
-
-console.log("Total character count:", totalCharCount);
-
-// 3. Array Loop using forEach() with console.log during & after iteration
-const colors = ["Red", "Green", "Blue", "Yellow"];
-let processedCount = 0; // Outer variable initialization
-
-console.log("\\n--- 3. Array Loop using forEach() & console.log ---");
-colors.forEach((color, index) => {
-  // Inner variable initialization per iteration
-  const formattedColor = \`[\${index + 1}] Color: \${color.toUpperCase()}\`;
-  processedCount++;
-  console.log(formattedColor);
-});
-
-// console.log output after loop completes
-console.log("Finished logging total colors count after loop:", processedCount);
-
-// 4. Array Initialization
-const myArray = [10, 20, 30, 40, 50];
-console.log("\n--- 4. Array Initialization ---");
-console.log("Initialized Array:", myArray);
+// Log array elements one by one
+numbers.forEach(num => console.log("Item:", num));
 `;
 
 export default function App() {
