@@ -5,17 +5,7 @@ import ConsoleOutput from './components/ConsoleOutput';
 import DOMPreview from './components/DOMPreview';
 import { executeCode } from './utils/runnerWorker';
 
-const DEFAULT_CODE = `// JS Studio - Online JavaScript IDE
-// Press F5 or Ctrl+Enter to execute JavaScript
-// Type '/' in the editor for quick snippets (/logarray, /maploop, /forloop, etc.)
-
-console.log("🚀 Welcome to JS Studio!");
-
-const numbers = [10, 20, 30, 40, 50];
-
-// Log array elements one by one
-numbers.forEach(num => console.log("Item:", num));
-`;
+const DEFAULT_CODE = '';
 
 export default function App() {
   const [code, setCode] = useState(DEFAULT_CODE);
@@ -92,7 +82,7 @@ export default function App() {
   }, [code, isRunning]);
 
   const handleClearCode = () => {
-    setCode('// Start typing your JavaScript code here...\n\nconsole.log("Hello World!");\n');
+    setCode('');
   };
 
   const handleClearConsole = () => {
