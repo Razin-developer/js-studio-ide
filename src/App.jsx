@@ -6,9 +6,9 @@ import DOMPreview from './components/DOMPreview';
 import { executeCode } from './utils/runnerWorker';
 
 const DEFAULT_CODE = `// JS Studio - Online JavaScript IDE
-// Write your JavaScript code below and press Ctrl+Enter or click "Run Code"
+// Press F5 or Ctrl+Enter to execute JavaScript
 
-console.log("🚀 Hello from JavaScript!");
+console.log("🚀 Welcome to JS Studio Terminal!");
 
 function calculateSum(a, b) {
   return a + b;
@@ -34,7 +34,7 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  const handleRunCode = () => {
+  const handleRunCode = (codeToRun = code) => {
     if (isRunning) return;
 
     setIsRunning(true);
@@ -48,7 +48,7 @@ export default function App() {
     }
 
     const cancelWorker = executeCode(
-      code,
+      codeToRun,
       (logEntry) => {
         if (logEntry.type === 'clear') {
           setLogs([]);
@@ -64,6 +64,33 @@ export default function App() {
 
     activeWorkerRef.current = cancelWorker;
   };
+
+  // Global hotkey event listener for F5, Ctrl+Enter, Shift+Enter
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // F5 key
+      if (e.key === 'F5') {
+        e.preventDefault();
+        handleRunCode();
+      }
+      // Ctrl+Enter or Cmd+Enter
+      else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleRunCode();
+      }
+      // Shift+Enter
+      else if (e.shiftKey && e.key === 'Enter') {
+        // Prevent default if in global non-textarea context
+        if (document.activeElement.tagName !== 'TEXTAREA' && !document.activeElement.classList.contains('inputarea')) {
+          e.preventDefault();
+          handleRunCode();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [code, isRunning]);
 
   const handleClearCode = () => {
     setCode('// Start typing your JavaScript code here...\n\nconsole.log("Hello World!");\n');
@@ -105,7 +132,7 @@ export default function App() {
   return (
     <div className="app-container">
       <Header
-        onRunCode={handleRunCode}
+        onRunCode={() => handleRunCode(code)}
         isRunning={isRunning}
         onClearCode={handleClearCode}
         theme={theme}
@@ -121,7 +148,7 @@ export default function App() {
           <CodeEditor
             code={code}
             onChange={(newCode) => setCode(newCode || '')}
-            onRunCode={handleRunCode}
+            onRunCode={() => handleRunCode(code)}
             theme={theme}
             editorRef={editorRef}
           />
@@ -133,6 +160,7 @@ export default function App() {
               executionMetrics={executionMetrics}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              onEvaluateCommand={(cmd) => handleRunCode(cmd)}
             />
           ) : (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -142,7 +170,7 @@ export default function App() {
                     className={`tab-btn ${activeTab === 'console' ? 'active' : ''}`}
                     onClick={() => setActiveTab('console')}
                   >
-                    Console Output
+                    Terminal Output
                   </button>
                   <button
                     className={`tab-btn ${activeTab === 'preview' ? 'active' : ''}`}

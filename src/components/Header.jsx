@@ -39,10 +39,21 @@ export default function Header({
           className="btn btn-primary" 
           onClick={onRunCode}
           disabled={isRunning}
-          title="Run Code (Ctrl+Enter)"
+          title="Run Code (F5 or Ctrl+Enter)"
+          style={{ paddingRight: '14px' }}
         >
-          <Play size={16} fill="currentColor" />
+          <Play size={15} fill="currentColor" />
           {isRunning ? "Running..." : "Run Code"}
+          <span style={{ 
+            fontSize: '0.68rem', 
+            background: 'rgba(255,255,255,0.2)', 
+            padding: '1px 5px', 
+            borderRadius: '4px',
+            marginLeft: '4px',
+            fontWeight: '600'
+          }}>
+            F5
+          </span>
         </button>
 
         <button 
@@ -50,7 +61,7 @@ export default function Header({
           onClick={onFormatCode}
           title="Format JavaScript Code"
         >
-          <Sparkles size={16} />
+          <Sparkles size={15} />
           Format
         </button>
 
@@ -59,7 +70,7 @@ export default function Header({
           onClick={onCopyCode}
           title="Copy Code to Clipboard"
         >
-          {isCopied ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
+          {isCopied ? <Check size={15} color="#10b981" /> : <Copy size={15} />}
           {isCopied ? "Copied" : "Copy"}
         </button>
 
@@ -68,7 +79,7 @@ export default function Header({
           onClick={onDownload}
           title="Download script.js"
         >
-          <Download size={16} />
+          <Download size={15} />
           Export
         </button>
 
@@ -77,7 +88,7 @@ export default function Header({
           onClick={onClearCode}
           title="Reset Code Editor"
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={15} />
         </button>
 
         <button 
@@ -85,7 +96,7 @@ export default function Header({
           onClick={onToggleTheme}
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`}
         >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
         </button>
       </div>
     </header>
